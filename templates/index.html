@@ -3,6 +3,7 @@
 
 <head>
     <title>Multi Project Timer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 
@@ -13,17 +14,17 @@
         <button type="submit">Add Timer</button>
     </form>
     <br>
-    {% for timer in timers %}
-    <div>
-        <h3>{{ timer.project_name }}</h3>
-        <div id="timer-{{ timer.id }}" data-seconds="{{ timer.remaining_seconds }}"
-            data-paused="{{ timer.is_paused|lower }}"></div>
-        <a href="/toggle/{{ timer.id }}">
-            {{ 'Resume' if timer.is_paused else 'Pause' }}
-        </a>
-        <hr>
+{% for timer in timers %}
+<div class="timer-box">
+    <h3>{{ timer.project_name }}</h3>
+    <div id="timer-{{ timer.id }}" class="timer-text" data-seconds="{{ timer.remaining_seconds }}"
+        data-paused="{{ timer.is_paused|lower }}">
     </div>
-    {% endfor %}
+    <a href="/toggle/{{ timer.id }}">
+        {{ '▶️ Resume' if timer.is_paused else '⏸ Pause' }}
+    </a>
+</div>
+{% endfor %}
     <script>
         const timers = document.querySelectorAll('[id^="timer-"]');
         timers.forEach(div => {
