@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Multi Project Timer</title>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+
+<body>
+    <h1>🎯 100-Hour Project Countdown</h1>
+    <form method="POST" action="/add">
+        <input type="text" name="project_name" placeholder="New project name" required>
+        <button type="submit">Add Timer</button>
+    </form>
+    <br>
+    {% for timer in timers %}
+    <div>
+        <h3>{{ timer.project_name }}</h3>
+        <div id="timer-{{ timer.id }}" data-seconds="{{ timer.remaining_seconds }}"
+            data-paused="{{ timer.is_paused|lower }}"></div>
+        <a href="/toggle/{{ timer.id }}">
+            {{ 'Resume' if timer.is_paused else 'Pause' }}
+        </a>
+        <hr>
+    </div>
+    {% endfor %}
+    <script>
+        const timers = document.querySelectorAll('[id^="timer-"]');
+        timers.forEach(div => {
+            const seconds = parseInt(div.dataset.seconds);
+            const paused = div.dataset.paused === 'true';
+            startCountdown(div.id, seconds, paused);
+        });
+    </script>
+</body>
+
+</html>
